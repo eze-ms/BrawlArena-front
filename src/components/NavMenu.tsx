@@ -2,17 +2,18 @@ import { Fragment, useCallback } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import { Bars3Icon } from '@heroicons/react/20/solid';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthUser } from '../hooks/useAuthUser';
+import { useAuth } from '../context/AuthContext';
 import { ROUTES } from '../constants/routes';
 
 export default function NavMenu() {
-  const { user } = useAuthUser();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = useCallback(() => {
-    localStorage.removeItem('token');
-    navigate(ROUTES.login);
-  }, [navigate]);
+    logout(); // ← limpia el token y el contexto
+    navigate(ROUTES.login); // ← redirige
+  }, [logout, navigate]);
+  
 
   return (
     <Popover className="relative">

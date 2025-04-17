@@ -1,6 +1,11 @@
+// src/views/Login.tsx
+
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants/routes';
+import { API } from '../constants/api';
+import { fetchWithAuth } from '../utils/fetchWithAuth';
 
 type LoginForm = {
   nickname: string;
@@ -8,35 +13,28 @@ type LoginForm = {
 };
 
 export default function Login() {
+  const { refreshUser } = useAuth(); 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginForm>();
   const navigate = useNavigate();
 
   const onSubmit = async (data: LoginForm) => {
     try {
-      console.log('[Login] Enviando credenciales:', data);
-    
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}${API.auth.login}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
-    
-      if (!res.ok) {
-        console.error('[Login] Error: credenciales inválidas');
-        throw new Error('Credenciales inválidas');
-      }
-    
+
+      if (!res.ok) throw new Error('Credenciales inválidas');
+
       const token = await res.text();
-      console.log('[Login] Token recibido:', token);
       localStorage.setItem('token', token);
-    
-      const validate = await fetch(`${import.meta.env.VITE_API_URL}/auth/validate`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-    
-      const result = await validate.json();
-      console.log('[Login] Usuario autenticado:', result);
-    
+
+      await refreshUser();
+
+      const validateRes = await fetchWithAuth(API.auth.validate);
+      const result = await validateRes.json();
+
       navigate(result.role === 'ADMIN' ? ROUTES.adminDashboard : ROUTES.dashboard);
     } catch (e) {
       console.error('[Login] Error inesperado:', e);

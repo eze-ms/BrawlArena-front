@@ -4,5 +4,5 @@ export const ROUTES = {
   register: '/register',
   dashboard: '/dashboard',
   adminDashboard: '/admin/dashboard',
-  gallery: '/dashboard', // si decides separarla, cámbialo luego
+  gallery: '/gallery', 
 };

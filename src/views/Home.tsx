@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuthUser } from '../hooks/useAuthUser';
+import { useAuth } from '../context/AuthContext'; // ← cambia el import
 import playButton from '../assets/play.webp';
-import { ROUTES }from '../constants/routes';
+import { ROUTES } from '../constants/routes';
 
 export default function Home() {
-  const { user } = useAuthUser();
+  const { user } = useAuth(); // ← usa el nuevo hook
   const navigate = useNavigate();
 
   const handlePlayClick = () => {
