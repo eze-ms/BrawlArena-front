@@ -25,7 +25,9 @@ export const API = {
       start: "/builds/start",
       validate: "/builds/validate",
       history: "/builds/history",
+      pending: (characterId: string) => `/builds/pending?characterId=${characterId}`,
     },
+    
     powers: {
       all: "/powers",
       assign: "/powers/assign",

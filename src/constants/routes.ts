@@ -4,5 +4,6 @@ export const ROUTES = {
   register: '/register',
   dashboard: '/dashboard',
   adminDashboard: '/admin/dashboard',
+  game: '/game/:characterId',
   gallery: '/gallery', 
 };

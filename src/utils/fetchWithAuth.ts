@@ -5,22 +5,23 @@ export async function fetchWithAuth(
   const token = localStorage.getItem("token");
 
   if (!token) {
-    throw new Error("Token no encontrado");
+    return Promise.reject(new Error("Token no encontrado"));
   }
 
-  const headers = {
-    ...(init.headers || {}),
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  };
+  const headers = new Headers(init.headers || {});
+  headers.set("Authorization", `Bearer ${token}`);
+
+  if (!headers.has("Content-Type") && !(init.body instanceof FormData)) {
+    headers.set("Content-Type", "application/json");
+  }
 
   const url = `${import.meta.env.VITE_API_URL}${input}`;
   const response = await fetch(url, { ...init, headers });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error("[fetchWithAuth] Error response body:", errorText);
-    throw new Error(errorText || "Error en la petición");
+  if (response.status === 401) {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+    return Promise.reject(new Error("Token expirado o inválido"));
   }
 
   return response;

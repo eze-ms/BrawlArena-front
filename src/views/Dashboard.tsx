@@ -15,7 +15,7 @@ export default function Dashboard() {
         const res = await fetchWithAuth(API.characters.all);
         const characters: Character[] =
           res.status === 204 ? [] : await res.json();
-  
+
         setCharacters(characters);
       } catch (err) {
         console.error("[Dashboard] Error al obtener personajes:", err);

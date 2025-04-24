@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext"; // ← nuevo import
+import { useAuth } from "../context/AuthContext"; 
+import { API } from "../constants/api";
 
 type GalleryModel = {
   id: string;
@@ -8,7 +9,7 @@ type GalleryModel = {
 };
 
 export default function Gallery() {
-  const { user } = useAuth(); // ← nuevo hook
+  const { user } = useAuth(); 
   const [models, setModels] = useState<GalleryModel[]>([]);
   const [error, setError] = useState<string>("");
 
@@ -17,14 +18,14 @@ export default function Gallery() {
       if (!user) return;
 
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/users/me/gallery`, {
-          method: 'GET',
-          credentials: 'include',
+        const response = await fetch(`${import.meta.env.VITE_API_URL}${API.users.gallery}`, {
+          method: "GET",
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
           },
         });
+        
 
         if (!response.ok) {
           setError("No se pudieron cargar los modelos.");

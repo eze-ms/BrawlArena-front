@@ -6,6 +6,7 @@ import AdminDashboard from "./views/AdminDashboard";
 import Gallery from "./views/Gallery";
 import Login from "./views/Login";
 import Register from "./views/Register";
+import Game from "./views/Game";
 import { ROUTES } from "./constants/routes";
 import RequireUser from "./components/RequireUser";
 
@@ -22,6 +23,14 @@ export default function AppRouter() {
             element={
               <RequireUser>
                 <Dashboard />
+              </RequireUser>
+            }
+          />
+          <Route
+            path={ROUTES.game}
+            element={
+              <RequireUser>
+                <Game />
               </RequireUser>
             }
           />
