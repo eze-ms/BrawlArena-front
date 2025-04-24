@@ -10,10 +10,11 @@ export interface Character {
   name: string;
   description: string;
   difficulty: string;
-  pieces: Piece[];
-  powers: Power[];
-  unlocked: boolean;
   imageUrl: string;
-  playerId: string;
+  gameImageUrl: string; // ← añade esto
   cost: number;
+  powers: string[];
+  pieces: Piece[];
+  unlocked: boolean;
 }
+

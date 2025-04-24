@@ -14,7 +14,9 @@ export const API = {
       unlocked: "/characters/unlocked",
       unlock: "/characters/unlock", 
       detail: (id: string) => `/characters/${id}`,
+      assignPieces: (id: string) => `/characters/${id}/pieces`, 
     },
+  
     gallery: {
       public: "/gallery",
       share: "/gallery/share",
