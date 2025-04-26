@@ -22,7 +22,7 @@ export default function CharacterList({ characters }: Props) {
           }}
           className={`group relative pt-72 pb-12 w-64 flex flex-col items-center shadow-lg card-corner-fold ${
             character.unlocked
-              ? "bg-custom-card cursor-pointer"
+              ? "bg-custom-hover cursor-pointer"
               : "bg-gray-600 grayscale opacity-60 backdrop-blur-sm"
           } rounded-tr-lg rounded-br-lg rounded-bl-lg`}
         >

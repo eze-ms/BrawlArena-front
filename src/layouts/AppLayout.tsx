@@ -6,7 +6,7 @@ export default function AppLayout() {
     <main className="min-h-screen flex flex-col">
       <Header />
 
-      <section className="flex-1 max-w-screen-2xl mx-auto mt-10 p-5">
+      <section className="flex-1 max-w-screen-2xl mx-auto mt-8 p-5">
         <Outlet />
       </section>
 
