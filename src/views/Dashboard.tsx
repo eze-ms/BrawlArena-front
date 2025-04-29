@@ -8,36 +8,57 @@ export default function Dashboard() {
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [tokens, setTokens] = useState<number>(0);
 
   useEffect(() => {
-    const fetchCharacters = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetchWithAuth(API.characters.all);
+        // Obtener personajes
+        const resCharacters = await fetchWithAuth(API.characters.all);
         const characters: Character[] =
-          res.status === 204 ? [] : await res.json();
-
+          resCharacters.status === 204 ? [] : await resCharacters.json();
         setCharacters(characters);
+  
+        // Obtener perfil actualizado
+        const resUser = await fetchWithAuth(API.users.me);
+        if (resUser.ok) {
+          const userData = await resUser.json();
+          setTokens(userData.tokens ?? 0); 
+        } else {
+          console.error("[Dashboard] Error al obtener usuario:", resUser.status);
+        }
+  
       } catch (err) {
-        console.error("[Dashboard] Error al obtener personajes:", err);
-        setError("No se pudieron cargar los personajes");
+        console.error("[Dashboard] Error al obtener datos:", err);
+        setError("No se pudieron cargar los datos");
       } finally {
         setLoading(false);
       }
     };
   
-    fetchCharacters();
+    fetchData();
   }, []);
   
-
-  if (loading) return <p className="text-white">Cargando personajes...</p>;
+  if (loading) return <p className="text-white">Cargando datos...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <>
-      <h1 className="text-5xl font-bold">Mis personajes</h1>
-      <p className="text-2xl font-light text-white mt-5">Administra tus personajes</p>
+      {/* Nueva sección de tokens */}
+      <div className="bg-blue-400 w-2/5 font-exo p-4 rounded-md">
+        <p className="text-xl font-semibold text-blue-100">
+          Tokens disponibles: {tokens}
+        </p>
+      </div>
+     
+
       <div className="mt-10">
-        <CharacterList characters={characters} />
+        <CharacterList
+          characters={characters}
+          setCharacters={setCharacters}
+          tokens={tokens}
+          setTokens={setTokens}
+        />
       </div>
     </>
   );

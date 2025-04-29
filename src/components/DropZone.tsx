@@ -14,9 +14,9 @@ export default function DropZone({ placedPieces, onDropSuccess, hasStarted }: Dr
   >(() => ({
     accept: "piece",
     drop: (item) => {
-      if (!hasStarted) return;  // 🚫 Bloquear si no ha empezado
-      if (placedPieces.includes(item.id)) return;  // 🚫 Bloquear si ya está colocada
-      onDropSuccess(item.id);  // ✅ Solo ahora permitir colocar
+      if (!hasStarted) return;
+      if (placedPieces.includes(item.id)) return; 
+      onDropSuccess(item.id); 
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),

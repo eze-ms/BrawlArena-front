@@ -10,6 +10,20 @@ import type { Piece } from "../types/piece";
 import type { Character } from "../types/character";
 import playButton from "../assets/play.webp";
 import CullienPreview from "../assets/Baby_preview.webp";
+import MeikoPreview from "../assets/Meiko_preview.webp";
+import TaekwonPreview from "../assets/Taekwon_preview.webp";
+import ErrantPreview from "../assets/Errant_preview.webp";
+import FishbladePreview from "../assets/Fishblade_preview2.webp";
+import GrishotPreview from "../assets/Gritshot_preview2.webp";
+import FuriaPreview from "../assets/Furia_preview2.webp";
+import GrunakPreview from "../assets/Grunak_preview.webp";
+import LucyPreview from "../assets/Lucy_preview2.webp";
+import RaidonPreview from "../assets/Raidon_preview.webp";
+import BearzerkerPreview from "../assets/Bearzerker_preview.webp";
+import ClusterPreview from "../assets/Cluster_preview.webp";
+import LuffyPreview from "../assets/Luffy_preview.webp";
+
+
 import tokenImg from "../assets/token.webp";
 
 // Componente principal
@@ -33,21 +47,33 @@ export default function Game() {
   const [scoreFeedback, setScoreFeedback] = useState<"positive" | "negative" | null>(null);
   const scoreRef = useRef<HTMLParagraphElement>(null);
   const [bounce, setBounce] = useState(false);
-
-
+  
   //! --- Siluetas de personajes ---
   const silhouetteMap: Record<string, string> = {
     Cullien: CullienPreview,
+    Meiko: MeikoPreview,
+    Taekwon: TaekwonPreview,
+    Errant: ErrantPreview,
+    Fishblade: FishbladePreview,
+    Gritshot: GrishotPreview,
+    Furia: FuriaPreview,
+    Grunak: GrunakPreview,
+    Lucy: LucyPreview,
+    Raidon: RaidonPreview,
+    Bearzerker: BearzerkerPreview,
+    Cluster: ClusterPreview,
+    Luffy: LuffyPreview,
+
   }
 
   const getSilhouetteImage = (characterName: string) => {
     return silhouetteMap[characterName] || "";
   };
 
+  const intervalRef = useRef<number | null>(null);
+
   //! --- Función para validar montaje ---
   const handleValidate = useCallback(async () => {
-    console.log("[handleValidate] Validando montaje...");
-  
     const durationSec = Math.floor((Date.now() - startTime) / 1000);
   
     try {
@@ -59,34 +85,46 @@ export default function Game() {
   
       if (!res.ok) {
         console.error("[handleValidate] Error validando:", res.status);
-        if (res.status === 400) throw new Error("Montaje inválido.");
-        if (res.status === 403) throw new Error("Personaje no desbloqueado.");
-        if (res.status === 404) throw new Error("No hay build pendiente.");
-        throw new Error("Error al validar el montaje.");
+        throw new Error("Error al validar montaje.");
       }
   
       const data = await res.json();
-      console.log("[handleValidate] Montaje validado con éxito. Data:", data);
+  
+      const earned = data.score;
   
       setResult({ score: data.score, errors: data.errors });
+  
+      if (earned !== 0) {
+        // Saldo actual
+        const userRes = await fetchWithAuth(API.users.me);
+        const userData = await userRes.json();
+        const currentTokens = userData.tokens ?? 0;
+  
+        const totalTokens = Math.max(0, currentTokens + earned);
+  
+        await fetchWithAuth(API.users.tokens, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(totalTokens),
+        });
+  
+        console.log(`[handleValidate] Tokens actualizados: ${currentTokens} + (${earned}) = ${totalTokens}`);
+      }
+  
     } catch (err) {
       console.error("[handleValidate] Error en validación:", err);
       setError("Error al validar montaje");
     }
   }, [startTime, characterId, placedPieces]);
   
-
+  
   //! --- Manejar drop de piezas ---
   const handlePieceDrop = (pieceId: string) => {
-    console.log("[handlePieceDrop] Intentando dropear:", pieceId);
-
   if (!hasStarted) {
-    console.log("[handlePieceDrop] Partida no iniciada. Ignorando drop.");
     return;
   }
 
   if (placedPieces.includes(pieceId)) {
-    console.log("[handlePieceDrop] Pieza ya colocada:", pieceId);
     return;
   }
 
@@ -114,10 +152,10 @@ export default function Game() {
       setProgressScore((prev) => prev + incremento);
       setScoreFeedback(incremento > 0 ? "positive" : "negative");
   
-      setBounce(true); // Activar animación
+      setBounce(true);
   
       setTimeout(() => {
-        setBounce(false); // Desactivar animación
+        setBounce(false);
       }, 500);
   
       setTimeout(() => setScoreFeedback(null), 1000);
@@ -126,22 +164,21 @@ export default function Game() {
   
   //! --- Detectar montaje completo ---
   useEffect(() => {
-    console.log("[useEffect] placedPieces actualizado:", placedPieces);
-  
     if (!character || !hasStarted || result) return;
   
     const correctPieceIds = new Set(character.pieces.filter(p => !p.fake).map(p => p.id));
     const placedSet = new Set(placedPieces);
   
-    const isComplete = placedSet.size === correctPieceIds.size &&
-      [...placedSet].every(id => correctPieceIds.has(id));
-  
-    console.log("[useEffect] ¿Montaje completo?:", isComplete);
+    const isComplete = [...correctPieceIds].every(id => placedSet.has(id));
   
     if (isComplete) {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
       handleValidate();
     }
   }, [placedPieces, character, hasStarted, result, handleValidate]);
+  
 
   //! --- Carga inicial del personaje y build ---
   useEffect(() => {
@@ -196,7 +233,7 @@ export default function Game() {
   if (error) return <p className="text-center mt-10 text-red-600">{error}</p>;
 
   return (
-    <div className="flex flex-col justify-center rounded-3xl shadow-lg w-3/6 mx-auto bg-custom-interface">
+    <div className="flex flex-col justify-center rounded-2xl shadow-lg w-3/6 mx-auto">
 
       {/* Vista previa del personaje */}
       {character && (
@@ -215,7 +252,7 @@ export default function Game() {
       )}
 
       {/* Bloque contador y piezas */}
-      <div className="p-4 bg-custom-hover rounded-md text-center text-xs text-white flex justify-between gap-4 items-center font-extrabold font-exo">
+      <div className="p-2 bg-custom-hover rounded-md text-center text-xs text-white flex justify-between gap-4 items-center font-extrabold font-exo">
 
         {/* Resultado parcial o final */}
         <div className="flex items-center gap-2 bg-custom-progress border-2 border-custom-border rounded-lg">
@@ -296,7 +333,7 @@ export default function Game() {
         <img
           src={playButton}
           alt="Botón Jugar"
-          className={`w-28 ${hasStarted ? "cursor-not-allowed" : "cursor-pointer hover:scale-105"} transition-transform`}
+          className={`w-28 ${hasStarted ? "cursor-not-allowed" : "cursor-pointer hover:scale-110"} transition-transform`}
           onClick={() => {
             if (hasStarted) return;
             setPlacedPieces([]);
@@ -305,16 +342,18 @@ export default function Game() {
             setTimeLeft(20);
             setHasStarted(true);
             setStartTime(Date.now());
-            const interval = setInterval(() => {
+          
+            intervalRef.current = window.setInterval(() => {
               setTimeLeft((prev) => {
                 if (prev <= 1) {
-                  clearInterval(interval);
+                  clearInterval(intervalRef.current!);
                   return 0;
                 }
                 return prev - 1;
               });
             }, 1000);
           }}
+          
         />
 
       </div>

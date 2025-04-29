@@ -11,7 +11,7 @@ export interface Character {
   description: string;
   difficulty: string;
   imageUrl: string;
-  gameImageUrl: string; // ← añade esto
+  gameImageUrl: string; 
   cost: number;
   powers: string[];
   pieces: Piece[];

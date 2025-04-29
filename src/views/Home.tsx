@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext'; // ← cambia el import
+import { useAuth } from '../context/AuthContext'; 
 import playButton from '../assets/play.webp';
 import { ROUTES } from '../constants/routes';
 

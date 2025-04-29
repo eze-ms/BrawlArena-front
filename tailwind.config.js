@@ -7,7 +7,6 @@ export default {
   theme: {
     extend: {
       backgroundColor: {
-        'custom-bg': '#1a0f42',
         'custom-hover': '#10346f',
         'custom-footer': '#693fef',
         'custom-card': '#241866',
