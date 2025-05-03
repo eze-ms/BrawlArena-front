@@ -3,6 +3,8 @@ import CharacterList from "../components/CharacterList";
 import type { Character } from "../types/character";
 import { fetchWithAuth } from "../utils/fetchWithAuth";
 import { API } from "../constants/api";
+import tokenImg from "../assets/token.webp";
+
 
 export default function Dashboard() {
   const [characters, setCharacters] = useState<Character[]>([]);
@@ -13,21 +15,41 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Obtener personajes
+        // Paso 1: Obtener todos los personajes
         const resCharacters = await fetchWithAuth(API.characters.all);
-        const characters: Character[] =
+        const allCharacters: Character[] =
           resCharacters.status === 204 ? [] : await resCharacters.json();
-        setCharacters(characters);
   
-        // Obtener perfil actualizado
+        let unlockedIds: string[] = [];
+  
+        // Paso 2: Verificar si el usuario está autenticado
         const resUser = await fetchWithAuth(API.users.me);
         if (resUser.ok) {
           const userData = await resUser.json();
-          setTokens(userData.tokens ?? 0); 
-        } else {
-          console.error("[Dashboard] Error al obtener usuario:", resUser.status);
+          setTokens(userData.tokens ?? 0);
+  
+          // Paso 3: Obtener personajes desbloqueados
+          const resUnlocked = await fetchWithAuth(API.characters.unlocked);
+          if (resUnlocked.status === 200) {
+            const unlockedCharacters: Character[] = await resUnlocked.json();
+            console.log("[Dashboard] Unlocked characters:", unlockedCharacters);
+
+            unlockedIds = unlockedCharacters.map((c) => c.id);
+          } else if (resUnlocked.status === 204) {
+            unlockedIds = [];
+          } else {
+            console.warn("[Dashboard] Error al obtener personajes desbloqueados:", resUnlocked.status);
+          }
         }
   
+        // Paso 4: Fusión — marcar los desbloqueados
+        const mergedCharacters = allCharacters.map((char) =>
+          unlockedIds.includes(char.id)
+            ? { ...char, unlocked: true }
+            : { ...char, unlocked: false }
+        );
+  
+        setCharacters(mergedCharacters);
       } catch (err) {
         console.error("[Dashboard] Error al obtener datos:", err);
         setError("No se pudieron cargar los datos");
@@ -39,16 +61,18 @@ export default function Dashboard() {
     fetchData();
   }, []);
   
+  
   if (loading) return <p className="text-white">Cargando datos...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <>
       {/* Nueva sección de tokens */}
-      <div className="bg-blue-400 w-2/5 font-exo p-4 rounded-md">
-        <p className="text-xl font-semibold text-blue-100">
-          Tokens disponibles: {tokens}
+      <div className="bg-purple-600 w-2/5 font-exo p-2 rounded-sm transform -skew-x-6 flex justify-center items-center">
+        <p className="text-xl font-semibold text-white shadow-text2 mr-1">
+          Disponibles: {tokens}
         </p>
+        <img src={tokenImg} alt="token" className="w-6 h-6" />
       </div>
      
 

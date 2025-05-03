@@ -1,66 +1,64 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext"; 
 import { API } from "../constants/api";
+import GalleryGrid from "../components/GalleryGrid";
+import type { SharedModel } from "../types/SharedModel";
 
-type GalleryModel = {
+
+interface CharacterData {
   id: string;
   name: string;
-  imageUrl: string;
-};
+  gameImageUrl: string;
+}
 
 export default function Gallery() {
-  const { user } = useAuth(); 
-  const [models, setModels] = useState<GalleryModel[]>([]);
-  const [error, setError] = useState<string>("");
+  const [models, setModels] = useState<SharedModel[]>([]);
+  const [characterImages, setCharacterImages] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchModels = async () => {
-      if (!user) return;
-
+    const fetchGalleryAndCharacters = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}${API.users.gallery}`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
+        const [galleryRes, charactersRes] = await Promise.all([
+          fetch(`${import.meta.env.VITE_API_URL}${API.gallery.list}`),
+          fetch(`${import.meta.env.VITE_API_URL}${API.characters.all}`),
+        ]);
+  
+        if (!galleryRes.ok || !charactersRes.ok) throw new Error("Error al cargar datos");
+  
+        const galleryText = await galleryRes.text();
+        const charactersText = await charactersRes.text();
+  
+        const galleryData: SharedModel[] = galleryText ? JSON.parse(galleryText) : [];
+        const charactersData: CharacterData[] = charactersText ? JSON.parse(charactersText) : [];
+
+        const imageMap: Record<string, string> = {};
+        charactersData.forEach((char) => {
+          imageMap[char.id] = char.gameImageUrl;
         });
-        
-
-        if (!response.ok) {
-          setError("No se pudieron cargar los modelos.");
-          return;
-        }
-
-        const data = await response.json();
-        setModels(data);
+    
+        setCharacterImages(imageMap);
+        setModels(galleryData);
       } catch (err) {
-        console.error(err);
-        setError("Error al cargar la galería.");
+        console.error("[Gallery]", err);
+        setError("No se pudo cargar la galería.");
+      } finally {
+        setLoading(false);
       }
     };
+  
+    fetchGalleryAndCharacters();
+  }, []);
+  
+  
 
-    fetchModels();
-  }, [user]);
+  if (loading) return <p className="text-white">Cargando modelos...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <section className="p-5 text-white">
-      <h1 className="text-3xl font-exo mb-6">Galería de Modelos</h1>
-
-      {error && <p className="text-red-500">{error}</p>}
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {models.length > 0 ? (
-          models.map((model) => (
-            <div key={model.id} className="border p-4 rounded-lg bg-gray-800">
-              <img src={model.imageUrl} alt={model.name} className="w-full h-48 object-cover rounded-md" />
-              <h2 className="text-lg mt-3">{model.name}</h2>
-            </div>
-          ))
-        ) : (
-          <p>No tienes modelos compartidos.</p>
-        )}
-      </div>
+      <h1 className="text-3xl font-exo mb-6">Galería Pública</h1>
+      <GalleryGrid models={models} characterImages={characterImages} />
     </section>
   );
 }

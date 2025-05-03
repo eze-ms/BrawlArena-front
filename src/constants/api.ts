@@ -16,9 +16,8 @@ export const API = {
       detail: (id: string) => `/characters/${id}`,
       assignPieces: (id: string) => `/characters/${id}/pieces`, 
     },
-  
     gallery: {
-      public: "/gallery",
+      list: "/gallery",
       share: "/gallery/share",
       highlighted: "/gallery/highlighted",
       sharedByCharacter: (id: string) => `/gallery/character/${id}`,

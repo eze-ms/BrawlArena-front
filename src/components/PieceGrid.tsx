@@ -34,7 +34,7 @@ function DraggablePiece({ piece, onSelect, selected, placedPieces }: DraggablePi
   >(() => ({
     type: ItemTypes.PIECE,
     item: { id: piece.id },
-    canDrag: !isPlaced, // 🚫 No permite arrastrar si ya está colocada
+    canDrag: !isPlaced, 
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -79,7 +79,7 @@ export default function PieceGrid({ pieces, onSelect, selectedIds, placedPieces 
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full max-w-full overflow-hidden">
       <button
         aria-label="Desplazar carrusel a la izquierda"
         className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gray-400 opacity-70 rounded-full p-2 shadow"

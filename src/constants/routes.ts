@@ -5,5 +5,8 @@ export const ROUTES = {
   dashboard: '/dashboard',
   adminDashboard: '/admin/dashboard',
   game: '/game/:characterId',
-  gallery: '/gallery', 
+  gallery: '/gallery',
+  characters: {
+    all: '/characters/all',
+  },
 };

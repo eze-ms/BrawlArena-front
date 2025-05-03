@@ -11,12 +11,10 @@ export default {
         'custom-footer': '#693fef',
         'custom-card': '#241866',
         'custom-dateCharacter': '#8f48b6',
-        'custom-interface': '#15417f',
+        'custom-interface': '#2160a7',
         'custom-progress': '#51ef8e',
-        'custom-piece': '#172554'
-      },
-      backgroundImage: {
-        'custom-bg': "url('/src/assets/background.webp')",
+        'custom-piece': '#172554',
+        'custom-bg': '#164484'
       },
       colors: {
         'primary-orange': '#f26064',
@@ -26,6 +24,9 @@ export default {
       fontFamily: {
         fortnite: ['"Anton"', 'sans-serif'],
         exo: ['"Exo 2"', 'sans-serif'],
+      },
+      fontSize: {
+        'small': '0.50rem', // Cambiar el tamaño de text-xs a 0.50rem
       },
       blur: {
         xs: '5px',

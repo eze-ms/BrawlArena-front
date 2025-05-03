@@ -51,6 +51,8 @@ export default function CharacterList({ characters, setCharacters, tokens, setTo
         throw new Error(errorText || "Error al desbloquear personaje.");
       }
 
+      navigate(`/game/${selectedCharacter.id}`);
+
       const userRes = await fetchWithAuth(API.users.me);
       if (userRes.ok) {
         const userData = await userRes.json();
@@ -84,7 +86,7 @@ export default function CharacterList({ characters, setCharacters, tokens, setTo
         <div
           key={character.id}
           onClick={() => handleCharacterClick(character)}
-          className={`group relative pt-72 pb-12 w-64 flex flex-col items-center card-corner-fold ${
+          className={`group relative pt-72 pb-12 w-64 flex flex-col items-center card-corner-fold  ${
             character.unlocked
               ? "bg-custom-hover cursor-pointer"
               : "bg-gray-600 grayscale opacity-60 backdrop-blur-sm cursor-pointer"
@@ -110,8 +112,8 @@ export default function CharacterList({ characters, setCharacters, tokens, setTo
           <div className="bg-custom-dateCharacter w-full p-3 flex justify-between items-center font-exo absolute z-10 opacity-85 font-bold text-pink-200">
             <h2 className="text-2xl text-pink-50 shadow-text">{character.name}</h2>
             <div className="flex items-center gap-1">
-              <p className="text-sm text-gray-400">{character.cost}</p>
-              <img src={tokenImg} alt="token" className="w-7 h-7" />
+              <img src={tokenImg} alt="token" className="w-6 h-6" />
+              <p className="text-sm shadow-text2 text-white">{character.cost} THC</p>
             </div>
           </div>
         </div>

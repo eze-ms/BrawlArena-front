@@ -18,22 +18,8 @@ export default function AppRouter() {
           <Route index element={<Home />} />
           <Route path={ROUTES.login} element={<Login />} />
           <Route path={ROUTES.register} element={<Register />} />
-          <Route
-            path={ROUTES.dashboard}
-            element={
-              <RequireUser>
-                <Dashboard />
-              </RequireUser>
-            }
-          />
-          <Route
-            path={ROUTES.game}
-            element={
-              <RequireUser>
-                <Game />
-              </RequireUser>
-            }
-          />
+          <Route path={ROUTES.dashboard} element={<RequireUser><Dashboard /></RequireUser>}/>
+          <Route path={ROUTES.game}element={<RequireUser><Game /></RequireUser>}/>
           <Route path={ROUTES.adminDashboard} element={<AdminDashboard />} />
           <Route path={ROUTES.gallery} element={<Gallery />} />
         </Route>

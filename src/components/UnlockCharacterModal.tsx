@@ -13,7 +13,6 @@ interface UnlockCharacterModalProps {
     error: string | null;
     tokenImg?: string;
   }
-  
 
 export default function UnlockCharacterModal({
   isOpen,
@@ -24,6 +23,7 @@ export default function UnlockCharacterModal({
   isLoading,
   error,
 }: UnlockCharacterModalProps) {
+  
   return (
     <Dialog open={isOpen} onClose={onCancel} className="relative z-50">
       {/* Fondo oscuro detrás */}
