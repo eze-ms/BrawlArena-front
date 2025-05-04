@@ -35,7 +35,7 @@ export default function Login() {
       const validateRes = await fetchWithAuth(API.auth.validate);
       const result = await validateRes.json();
 
-      navigate(result.role === 'ADMIN' ? ROUTES.adminDashboard : ROUTES.dashboard);
+      navigate(result.role === 'ADMIN' ? ROUTES.adminGallery : ROUTES.dashboard);
     } catch (e) {
       console.error('[Login] Error inesperado:', e);
     }

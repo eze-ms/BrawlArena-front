@@ -1,13 +1,16 @@
 import tokenImg from "../assets/token.webp";
 import type { SharedModel } from "../types/SharedModel";
+import coronaImg from "../assets/corona.webp";
 
 
 interface Props {
   models: SharedModel[];
   characterImages: Record<string, string>;
+  highlightedId: string | null;
+
 }
 
-export default function GalleryGrid({ models, characterImages }: Props) {
+export default function GalleryGrid({ models, characterImages, highlightedId }: Props) {
   if (models.length === 0) {
     return <p className="text-pink-300 italic">No hay modelos compartidos aún.</p>;
   }
@@ -28,6 +31,14 @@ export default function GalleryGrid({ models, characterImages }: Props) {
               backgroundPosition: 'center',
             }}
           >
+
+          {highlightedId === model.id && (
+            <img
+              src={coronaImg}
+              alt="Jugador de la Semana"
+              className="absolute top-0 right-1 w-14 h-14"
+            />
+          )}
           {/* Overlay oscuro para legibilidad */}
           <div className="absolute inset-0" />
         
@@ -37,7 +48,6 @@ export default function GalleryGrid({ models, characterImages }: Props) {
               {model.playerId}
             </h2>
           </div>
-
         
           {/* Precio */}
           <div className="absolute bottom-10 left-1 flex flex-col space-y-2 w-2/4">
@@ -54,8 +64,6 @@ export default function GalleryGrid({ models, characterImages }: Props) {
             </p>
           </div>
         </div>
-        
-        
         );
       })}
     </div>

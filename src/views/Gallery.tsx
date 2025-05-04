@@ -15,6 +15,8 @@ export default function Gallery() {
   const [characterImages, setCharacterImages] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
+
 
   useEffect(() => {
     const fetchGalleryAndCharacters = async () => {
@@ -46,19 +48,29 @@ export default function Gallery() {
         setLoading(false);
       }
     };
-  
+
+    const fetchHighlighted = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}${API.gallery.highlighted}`);
+        if (!res.ok) return;
+        const data: SharedModel = await res.json();
+        setHighlightedId(data.id);
+      } catch {
+        console.warn("No se pudo obtener el modelo destacado");
+      }
+    };
+
     fetchGalleryAndCharacters();
+    fetchHighlighted();
   }, []);
   
-  
-
   if (loading) return <p className="text-white">Cargando modelos...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <section className="p-5 text-white">
       <h1 className="text-3xl font-exo mb-6">Galería Pública</h1>
-      <GalleryGrid models={models} characterImages={characterImages} />
+      <GalleryGrid models={models} characterImages={characterImages} highlightedId={highlightedId} />
     </section>
   );
 }

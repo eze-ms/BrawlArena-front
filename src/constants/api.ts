@@ -21,6 +21,7 @@ export const API = {
       share: "/gallery/share",
       highlighted: "/gallery/highlighted",
       sharedByCharacter: (id: string) => `/gallery/character/${id}`,
+      delete: "/gallery", // Se usará como /gallery/{sharedModelId}
     },
     builds: {
       start: "/builds/start",

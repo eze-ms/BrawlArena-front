@@ -3,7 +3,7 @@ export const ROUTES = {
   login: '/login',
   register: '/register',
   dashboard: '/dashboard',
-  adminDashboard: '/admin/dashboard',
+  adminGallery: '/admin/gallery',
   game: '/game/:characterId',
   gallery: '/gallery',
   characters: {

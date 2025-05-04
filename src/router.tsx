@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "./layouts/AppLayout";
 import Home from "./views/Home";
 import Dashboard from "./views/Dashboard";
-import AdminDashboard from "./views/AdminDashboard";
+import AdminGallery from "./views/AdminGallery";
 import Gallery from "./views/Gallery";
 import Login from "./views/Login";
 import Register from "./views/Register";
@@ -20,7 +20,14 @@ export default function AppRouter() {
           <Route path={ROUTES.register} element={<Register />} />
           <Route path={ROUTES.dashboard} element={<RequireUser><Dashboard /></RequireUser>}/>
           <Route path={ROUTES.game}element={<RequireUser><Game /></RequireUser>}/>
-          <Route path={ROUTES.adminDashboard} element={<AdminDashboard />} />
+          <Route
+            path={ROUTES.adminGallery}
+            element={
+              <RequireUser role="ADMIN">
+                <AdminGallery />
+              </RequireUser>
+            }
+          />
           <Route path={ROUTES.gallery} element={<Gallery />} />
         </Route>
       </Routes>

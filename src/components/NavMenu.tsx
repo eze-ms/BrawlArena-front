@@ -10,10 +10,9 @@ export default function NavMenu() {
   const navigate = useNavigate();
 
   const handleLogout = useCallback(() => {
-    logout(); // ← limpia el token y el contexto
-    navigate(ROUTES.login); // ← redirige
+    logout();
+    navigate(ROUTES.login); 
   }, [logout, navigate]);
-  
 
   return (
     <Popover className="relative">
@@ -57,9 +56,14 @@ export default function NavMenu() {
                 )}
 
                 {user.role === 'ADMIN' && (
-                  <Link to={ROUTES.adminDashboard} className="block p-2 hover:text-purple-950">
-                    Panel Admin
-                  </Link>
+                  <>
+                    <Link to={ROUTES.adminGallery} className="block p-2 hover:text-purple-950">
+                      Panel Admin
+                    </Link>
+                    <Link to={ROUTES.gallery} className="block p-2 hover:text-purple-950">
+                      Galería
+                    </Link>
+                  </>
                 )}
 
                 <button
