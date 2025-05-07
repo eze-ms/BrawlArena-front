@@ -60,17 +60,12 @@ export default function AdminGallery() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <section className="p-5 text-white">
-      <h1 className="text-2xl font-exo mb-4">Panel Admin - Galería</h1>
-      <table className="w-full table-auto border">
-        <thead className="bg-gray-700">
-          <tr>
-            <th className="p-2">Jugador</th>
-            <th className="p-2">Personaje</th>
-            <th className="p-2">Puntaje</th>
-            <th className="p-2">Acciones</th>
-          </tr>
-        </thead>
+    <section className="p-5 text-white mt-24">
+      <div className="bg-purple-600 w-full md:w- font-exo p-2 rounded-sm transform -skew-x-6 flex justify-center items-center mb-6">
+        <h1 className="text-3xl font-exo shadow-text2">Administración de Galería</h1>
+      </div>
+      
+      <table className="w-full table-auto font-exo">
         <tbody>
           {models.map(model => (
             <AdminSharedModelRow

@@ -54,32 +54,47 @@ export default function AdminSharedModelRow({ model, highlightedId, onDeleted, o
   };
 
   return (
-    <tr className="border-b text-center">
-      <td className="p-3 text-sm text-gray-100">{model.playerId}</td>
-      <td className="p-3 text-sm text-gray-100">{model.characterId}</td>
-      <td className="p-3 text-sm text-gray-100">{model.score}</td>
-      <td className="p-3 flex flex-col sm:flex-row justify-center gap-2">
-        {isHighlighted ? (
-          <span className="text-xs text-gray-400 border border-gray-500 rounded px-3 py-1">Destacado</span>
-        ) : (
-          <button
-            onClick={handleHighlight}
-            disabled={isLoading}
-            className="bg-green-600 text-white px-3 py-1 rounded text-xs border-2 border-green-800 hover:bg-green-700"
-          >
-            Destacar
-          </button>
-        )}
+    <tr>
+      <td colSpan={4}>
+      <div
+  className={`bg-gradient-to-br from-[#1e1e2f] via-[#2e1e355e] to-[#1e1e2f] text-white p-4 rounded shadow-md border ${
+    isHighlighted ? 'border-purple-500' : 'border-gray-700'
+  } flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-4 transform transition-transform duration-300 hover:scale-[1.03]`}
+>
 
-        <button
-          onClick={handleDelete}
-          disabled={isLoading}
-          className="bg-pink-600 text-white px-3 py-1 rounded text-xs border-2 border-pink-800 hover:bg-pink-700"
-        >
-          Eliminar
-        </button>
-        {error && <span className="text-red-500 text-xs ml-2">{error}</span>}
+          <div className="text-sm space-y-1">
+            <p><span className="font-semibold">Jugador:</span> {model.playerId}</p>
+            <p><span className="font-semibold">Personaje:</span> {model.characterId}</p>
+            <p><span className="font-semibold">Puntaje:</span> {model.score}</p>
+            <p className="text-xs text-gray-400">Compartido: {new Date(model.sharedAt).toLocaleDateString()}</p>
+          </div>
+  
+          <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+            {isHighlighted ? (
+              <span className="text-xs text-gray-400 border border-gray-500 rounded px-3 py-2">Destacado</span>
+            ) : (
+              <button
+                onClick={handleHighlight}
+                disabled={isLoading}
+                className="bg-yellow-500 text-yellow-800 px-3 py-2 rounded text-xs hover:bg-yellow-900 hover:text-yellow-200"
+              >
+                Destacar
+              </button>
+            )}
+  
+            <button
+              onClick={handleDelete}
+              disabled={isLoading}
+              className="bg-pink-600 text-white px-3 py-2 rounded text-xs hover:bg-pink-800"
+            >
+              Eliminar
+            </button>
+  
+            {error && <span className="text-red-500 text-xs ml-2">{error}</span>}
+          </div>
+        </div>
       </td>
     </tr>
   );
+  
 }

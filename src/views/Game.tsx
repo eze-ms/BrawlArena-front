@@ -29,6 +29,7 @@ import ShareBuildModal from "../components/ShareBuildModal";
 import { FaShare } from "react-icons/fa";
 
 
+
 // Componente principal
 export default function Game() {
   // --- Hooks de React: Estado y navegación ---
@@ -64,6 +65,8 @@ export default function Game() {
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
   const [shareError, setShareError] = useState<string | null>(null);
+  const [showNeon, setShowNeon] = useState(false);
+
 
   
   //! --- Siluetas de personajes ---
@@ -117,6 +120,9 @@ export default function Game() {
         powerProgress: data.powerProgress,
       });
       
+      setShowNeon(true);
+      setTimeout(() => setShowNeon(false), 2000);
+
   
       if (earned !== 0) {
         // Saldo actual
@@ -302,12 +308,13 @@ export default function Game() {
 
   return (
     <>
-      <div className="flex justify-center w-full">
+      <div className="flex justify-center w-full mt-24 mb-8">
         <div className="flex flex-col justify-center shadow-md max-w-xs w-full mx-4 bg-custom-interface rounded-3xl">
   
           {/* Vista previa del personaje */}
           {character && (
-            <div className="relative w-full max-w-md mx-auto">
+            <div className={`relative w-full max-w-md mx-auto ${showNeon ? "flash-neon" : ""}`}>
+
   
               {/* Vista progresión poderes y compartir*/}
               <div className="absolute w-full flex justify-between">

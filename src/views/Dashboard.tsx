@@ -66,9 +66,9 @@ export default function Dashboard() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <>
+    <div className="flex-1 max-w-screen-2xl mx-auto p-5 mt-20 mb-16">
       {/* Nueva sección de tokens */}
-      <div className="bg-purple-600 w-2/5 font-exo p-2 rounded-sm transform -skew-x-6 flex justify-center items-center">
+      <div className="bg-purple-600 w-full md:w-1/3 font-exo p-2 rounded-sm transform -skew-x-6 flex justify-center items-center">
         <p className="text-xl font-semibold text-white shadow-text2 mr-1">
           Disponibles: {tokens}
         </p>
@@ -84,6 +84,6 @@ export default function Dashboard() {
           setTokens={setTokens}
         />
       </div>
-    </>
+    </div>
   );
 }

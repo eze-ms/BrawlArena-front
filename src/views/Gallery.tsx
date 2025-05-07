@@ -68,8 +68,11 @@ export default function Gallery() {
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (
-    <section className="p-5 text-white">
-      <h1 className="text-3xl font-exo mb-6">Galería Pública</h1>
+    <section className="p-5 text-white mt-16 mb-8">
+      <div className="bg-purple-600 w-full md:w-2/5 font-exo p-2 rounded-sm transform -skew-x-6 flex justify-center items-center mb-6">
+        <h1 className="text-3xl font-exo font-medium text-white shadow-text2">Galería Pública</h1>
+      </div>
+      
       <GalleryGrid models={models} characterImages={characterImages} highlightedId={highlightedId} />
     </section>
   );
