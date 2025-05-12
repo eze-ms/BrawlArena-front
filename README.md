@@ -27,10 +27,10 @@ El sistema integra autenticación con JWT, renderizado dinámico de componentes,
 #### Vista dashboard jugador
 ![Dashboard](./public/dashboard.png)
 
-#### Vista partida
-![Vista juego](./public/character1.png)
-![Vista juego](./public/character2.png)
-![Vista juego](./public/character3.png)
+<h4>Vista partida</h4>
+<img src="./public/character1.png" width="300"/>
+<img src="./public/character2.png" width="300"/>
+<img src="./public/character3.png" width="300"/>
 
 
 #### Vista Galería pública
