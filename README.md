@@ -28,9 +28,17 @@ El sistema integra autenticación con JWT, renderizado dinámico de componentes,
 ![Dashboard](./public/dashboard.png)
 
 <h4>Vista partida</h4>
-<img src="./public/character1.png" width="300"/>
-<img src="./public/character2.png" width="300"/>
-<img src="./public/character3.png" width="300"/>
+<table>
+  <tr>
+    <td><img src="./public/character1.png" width="300"/></td>
+    <td><img src="./public/character2.png" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="./public/character3.png" width="300"/></td>
+    <td><img src="./public/character4.png" width="300"/></td>
+  </tr>
+</table>
+
 
 
 #### Vista Galería pública
